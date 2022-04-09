@@ -13,16 +13,6 @@ ENV RAILS_DEVELOPMENT_HOSTS=".githubpreview.dev"
 ARG NODE_VERSION="lts/*"
 RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"
 
-# chrome
-RUN sudo apt update
-RUN sudo apt install curl build-essential unzip wget
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN sudo apt install ./google-chrome-stable_current_amd64.deb -y
-RUN export LATEST_VERSION=`curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE`
-RUN wget https://chromedriver.storage.googleapis.com/$LATEST_VERSION/chromedriver_linux64.zip
-RUN unzip chromedriver_linux64.zip
-RUN sudo mv chromedriver /usr/local/bin/
-
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
@@ -32,3 +22,9 @@ RUN sudo mv chromedriver /usr/local/bin/
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
+
+RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN apt update
+RUN apt install google-chrome-stable -y
+
