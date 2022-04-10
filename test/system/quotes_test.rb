@@ -14,22 +14,31 @@ class QuotesTest < ApplicationSystemTestCase
   end
 
   test "quoteを作る" do
-    # indexのページを開いたら"Quotes"のタイトルがあるはず。
     visit quotes_path
     assert_selector "h1", text: "Quotes"
 
-    # "New quote"をクリックしたら"New quote"のタイトルがあるはず
     click_on "New quote"
-    assert_selector "h1", text: "New quote"
-
-    # nameに"Capybara quote"を入れて"Create Quote"を押す
     fill_in "Name", with: "Capybara quote"
+
+    assert_selector "h1", text: "Quotes"
     click_on "Create quote"
 
-    # タイトルには"Quotes"がひょうじされてるはず
-    # "Capybara quote"がリストに追加されてるはず
     assert_selector "h1", text: "Quotes"
     assert_text "Capybara quote"
+  end
+
+  test "quoteを編集" do
+    visit quotes_path
+    assert_selector "h1", text: "Quotes"
+
+    click_on "Edit", match: :first
+    fill_in "Name", with: "Updated quote"
+
+    assert_selector "h1", text: "Quotes"
+    click_on "Update quote"
+
+    assert_selector "h1", text: "Quotes"
+    assert_text "Updated quote"
   end
 
   test "quoteを削除" do
